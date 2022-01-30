@@ -1,0 +1,17 @@
+url: https://homeassistant:8123                                            #REQUIRED - HA url
+apiKey: eyJ0eXAiOiJ...                                                     #REQUIRED - access token
+logLevel: 2                                                                #OPTIONAL - 0 - debug, 1 - info, 2 - warn, 3 - error
+interval: 30                                                               #OPTIONAL - in seconds
+entities:                                                                  #REQUIRED - required min 1
+- entity: sensor.temperature_1_out                                         #REQUIRED - entity id from HA (INDEX 0)
+- entity: sensor.temperature_2_in                                          #OPTIONAL - entity id from HA (INDEX 1)
+template: '{entities[0].attributes.friendly_name}: \n{entities[0].state}'  #REQUIRED - text to show using all entities, start with "entities[INDEX].", where INDEX is the number in entities section (start with 0)
+tooltip:                                                                   #OPTIONAL - hidden when not defined
+    template: 'Last update: {entities[0].last_updated.ToString()}'         #REQUIRED - use in the same way as in the template
+font:                                                                      #OPTIONAL - font settings
+  size: 10                                                                 #OPTIONAL - font size
+  color: '#ffffff'                                                         #OPTIONAL - define in HEX format
+  family: 'Arial'                                                          #OPTIONAL - name of family font
+size:                                                                      #OPTIONAL - widget size, changed only after restart widget
+  height: 40                                                               #OPTIONAL - widget height (max for screen 1920x1080 is 40) 
+  width: 200                                                               #OPTIONAL - widget width
