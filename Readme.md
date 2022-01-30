@@ -1,5 +1,7 @@
 # HomeAssistant Taskbar Widget
 
+![GitHub release (latest by date)](https://img.shields.io/github/downloads/PawelTwardawa/HomeAssistantTaskbarWidget/latest/total)
+
 Windows taskbar application presenting sensor data from Home Assistant.
 
 ## Screenshots
@@ -7,6 +9,8 @@ Windows taskbar application presenting sensor data from Home Assistant.
 ![HA Taskbar Widget](images/taskbar.PNG)
 
 ![Tooltip](images/tooltip.PNG)
+
+![Toolbars](images/toolbars.PNG)
 
 ![Menu](images/menu.PNG)
 
