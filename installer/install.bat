@@ -2,7 +2,7 @@
 
 rem installation path
 set filePath="%PROGRAMFILES%\HA Taskbar Widget\"
-set srcPath=".\data"
+set srcPath="%~dp0\data"
 
 rem Check permissions
 net session >nul 2>&1
@@ -38,3 +38,4 @@ goto END
 
 :END
 echo Installation completed
+pause
