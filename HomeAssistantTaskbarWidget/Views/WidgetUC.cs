@@ -18,6 +18,7 @@ namespace HomeAssistantTaskbarWidget.Views
         public void SetTooltip(string text)
         {
             labelToolTip.SetToolTip(label, text);
+            labelToolTip.ShowAlways = true;
         }
 
         public void UpdateText(string text)
