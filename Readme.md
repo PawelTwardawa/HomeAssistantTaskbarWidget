@@ -22,6 +22,21 @@ Sample full path to the file: `C:\Users\Pawel\Documents\HA Taskbar Widget\config
 
 A sample configuration file with description is located in [config.describe.yaml](sample/config.describe.yaml).
 
+### Mapping state
+To map state from HA to custom text, define the mapping settings for the entity:
+```
+- entity: light.monitor_led                                                       
+  mapping:                                                                
+    on: working                                                           
+    off: 'not working'  
+```
+To use mapping in a template, call the function `Map()` in the state:
+```
+template: '{entities[0].state.Map()}'
+```
+
+This settings should map the state of the entity 'on' to 'working' and display the text 'working' in the taskbar.
+
 ## Installation
 
 Download the [latest zip](https://github.com/PawelTwardawa/HomeAssistantTaskbarWidget/releases/latest/download/HomeAssistantTaskbarWidget.zip)  file from the [release](https://github.com/PawelTwardawa/HomeAssistantTaskbarWidget/releases) section. Then unpack downloaded archive. After unpacking, run the command line with administrator privileges, then run `.\install.bat`. 
