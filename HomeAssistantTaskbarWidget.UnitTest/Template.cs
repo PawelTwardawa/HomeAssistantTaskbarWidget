@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Dynamic.Core.Exceptions;
-using HomeAssistantTaskbarWidget.Model;
+using HomeAssistantTaskbarWidget.Model.HA;
 using HomeAssistantTaskbarWidget.Utils;
 
 namespace HomeAssistantTaskbarWidget.UnitTest
@@ -28,6 +28,24 @@ namespace HomeAssistantTaskbarWidget.UnitTest
                 id =  "3946d3be868c553b1a45449a0b677685",
                 parent_id =  null,
                 user_id =  null
+            }
+        };
+
+        private readonly Entity EntityLightOn = new Entity
+        {
+            entity_id = "sensor.led",
+            state = "on",
+            attributes = new Attributes
+            {
+                friendly_name = "LED"
+            },
+            last_changed = DateTime.Parse("2022-01-26T08:54:22.074431+00:00"),
+            last_updated = DateTime.Parse("2022-01-26T08:54:22.074431+00:00"),
+            context = new Context
+            {
+                id = "3946d3be868c553b1a45449a0b677685",
+                parent_id = null,
+                user_id = null
             }
         };
 
@@ -126,7 +144,7 @@ namespace HomeAssistantTaskbarWidget.UnitTest
         [TestMethod]
         public void ListCorrectTemplate()
         {
-            var template = "{items[1].attributes.friendly_name} => {items[0].state}";
+            var template = "{entities[1].attributes.friendly_name} => {entities[0].state}";
 
             var result = Helper.ReplaceTemplate(template, ListEntity);
 
@@ -136,7 +154,7 @@ namespace HomeAssistantTaskbarWidget.UnitTest
         [TestMethod]
         public void ListIncorrectPropInTemplate()
         {
-            var template = "{items[0].attribute.friendly_name} => {items[3].state}";
+            var template = "{entities[0].attribute.friendly_name} => {entities[3].state}";
 
             Action action = () => Helper.ReplaceTemplate(template, ListEntity);
 
@@ -146,7 +164,7 @@ namespace HomeAssistantTaskbarWidget.UnitTest
         [TestMethod]
         public void ListCorrectWithMethod()
         {
-            var template = "{items[0].attributes.friendly_name} Updated: {items[0].last_updated.ToShortDateString()}";
+            var template = "{entities[0].attributes.friendly_name} Updated: {entities[0].last_updated.ToShortDateString()}";
 
             var result = Helper.ReplaceTemplate(template, ListEntity);
 
@@ -156,7 +174,7 @@ namespace HomeAssistantTaskbarWidget.UnitTest
         [TestMethod]
         public void ListIncorrectMethodInTemplate()
         {
-            var template = "{items[0].attributes.friendly_name} Updated: {items[0].last_updated.ToShortDate()}";
+            var template = "{entities[0].attributes.friendly_name} Updated: {entities[0].last_updated.ToShortDate()}";
 
             Action action = () => Helper.ReplaceTemplate(template, ListEntity);
 
@@ -166,11 +184,79 @@ namespace HomeAssistantTaskbarWidget.UnitTest
         [TestMethod]
         public void ListCorrectWith3Props()
         {
-            var template = "{items[0].attributes.friendly_name}: {items[1].state} {items[0].attributes.unit_of_measurement}";
+            var template = "{entities[0].attributes.friendly_name}: {entities[1].state} {entities[0].attributes.unit_of_measurement}";
 
             var result = Helper.ReplaceTemplate(template, ListEntity);
 
             Assert.AreEqual("Temperature #1 out: 5.2 °C", result);
+        }
+
+        [TestMethod]
+        public void MappingStateOn()
+        {
+            var entity = EntityLightOn;
+
+            entity.state.Mapping = new Dictionary<string, string>
+            {
+                {"off", "not working"},
+                {"on", "working"},
+                {"unknown", "no set"}
+            };
+
+            var template = "{entities[0].attributes.friendly_name}: {entities[0].state.Map()}";
+
+            var result = Helper.ReplaceTemplate(template, new List<Entity> { entity });
+
+            Assert.AreEqual("LED: working", result);
+        }
+
+        [TestMethod]
+        public void MappingStateUnknownMap()
+        {
+            var entity = EntityLightOn;
+
+            entity.state.Mapping = new Dictionary<string, string>
+            {
+                {"off", "not working"},
+                {"unknown", "no set"}
+            };
+
+            var template = "{entities[0].attributes.friendly_name}: {entities[0].state.Map()}";
+
+            var result = Helper.ReplaceTemplate(template, new List<Entity> { entity });
+
+            Assert.AreEqual("LED: on", result);
+        }
+
+        [TestMethod]
+        public void MappingStateWithoutMapping()
+        {
+            var entity = EntityLightOn;
+
+            entity.state.Mapping = new Dictionary<string, string>
+            {
+                {"off", "not working"},
+                {"on", "working"},
+                {"unknown", "no set"}
+            };
+
+            var template = "{entities[0].attributes.friendly_name}: {entities[0].state}";
+
+            var result = Helper.ReplaceTemplate(template, new List<Entity> { entity });
+
+            Assert.AreEqual("LED: on", result);
+        }
+
+        [TestMethod]
+        public void MappingStateUndefinedMap()
+        {
+            var entity = EntityLightOn;
+
+            var template = "{entities[0].attributes.friendly_name}: {entities[0].state.Map()}";
+
+            var result = Helper.ReplaceTemplate(template, new List<Entity> { entity });
+
+            Assert.AreEqual("LED: on", result);
         }
     }
 }

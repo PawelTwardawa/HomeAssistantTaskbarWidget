@@ -1,7 +1,7 @@
 ﻿using HomeAssistantTaskbarWidget.Utils;
 using System.Drawing;
 using System.Windows.Forms;
-using Font = HomeAssistantTaskbarWidget.Model.Font;
+using Font = HomeAssistantTaskbarWidget.Model.Settings.Font;
 
 namespace HomeAssistantTaskbarWidget.Views
 {
@@ -32,7 +32,7 @@ namespace HomeAssistantTaskbarWidget.Views
             label.ForeColor = Helper.HexToColor(font.Color);
         }
 
-        public void UpdateSize(Model.Size size)
+        public void UpdateSize(Model.Settings.Size size)
         {
             Size = new Size(size.Width.Value, size.Height.Value);
             label.Size = new Size(size.Width.Value, size.Height.Value);

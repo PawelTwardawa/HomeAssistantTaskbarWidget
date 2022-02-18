@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using HomeAssistantTaskbarWidget.Model;
+using HomeAssistantTaskbarWidget.Model.Settings;
 using Newtonsoft.Json;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;

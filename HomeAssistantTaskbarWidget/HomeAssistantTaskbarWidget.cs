@@ -8,7 +8,8 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CSDeskBand.ContextMenu;
-using HomeAssistantTaskbarWidget.Model;
+using HomeAssistantTaskbarWidget.Model.HA;
+using HomeAssistantTaskbarWidget.Model.Settings;
 using HomeAssistantTaskbarWidget.Utils;
 using HomeAssistantTaskbarWidget.Views;
 
@@ -104,11 +105,29 @@ namespace HomeAssistantTaskbarWidget
 
         private async Task TaskHandler()
         {
+            while (!_homeAssistantClient.ServerReachable)
+            {
+                _taskScheduler.Stop();
+                await Task.Delay(1000);
+                _logger.LogDebug("Connection lost. Reconnecting...");
+                if (await _homeAssistantClient.CheckConnection())
+                {
+                    _taskScheduler.Start();
+                    return;
+                }
+                _control.Invoke(new Action(() => _control.UpdateText("Connection lost. Reconnecting...")));
+            }
+
             var settings = _settingsManager.GetSettings();
 
             var entities = settings.Entities.Select(x => x.Entity).ToList();
 
             var result = await _homeAssistantClient.GetEntitiesStateAsync(entities);
+
+            if (result == null || result.Count == 0)
+                return;
+
+            MergeStateMappings(settings, result);
 
             SetText(settings, result);
             SetTooltip(settings, result);
@@ -153,6 +172,14 @@ namespace HomeAssistantTaskbarWidget
 
             //    _control.Invoke(new Action(() => _control.SetTooltip(text)));
             //}
+        }
+
+        private void MergeStateMappings(Settings settings, List<Entity> entities)
+        {
+            foreach (var entity in entities)
+            {
+                entity.state.Mapping = settings.Entities.Where(x => x.Entity.Equals(entity.entity_id)).Select(x => x.Mapping).FirstOrDefault();
+            }
         }
 
 

@@ -90,6 +90,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CSDeskBand.cs" />
+    <Compile Include="Model\HA\State.cs" />
+    <Compile Include="Model\Settings\EntityItem.cs" />
+    <Compile Include="Model\Settings\Font.cs" />
+    <Compile Include="Model\Settings\Size.cs" />
+    <Compile Include="Model\Settings\Tooltip.cs" />
     <Compile Include="Utils\Helper.cs" />
     <Compile Include="IHomeAssistantClient.cs" />
     <Compile Include="HomeAssistantClient.cs" />
@@ -98,11 +103,11 @@
     <Compile Include="ISettingsManager.cs" />
     <Compile Include="ITaskScheduler.cs" />
     <Compile Include="Logger.cs" />
-    <Compile Include="Model\Attributes.cs" />
-    <Compile Include="Model\Context.cs" />
-    <Compile Include="Model\Entity.cs" />
+    <Compile Include="Model\HA\Attributes.cs" />
+    <Compile Include="Model\HA\Context.cs" />
+    <Compile Include="Model\HA\Entity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Model\Settings.cs" />
+    <Compile Include="Model\Settings\Settings.cs" />
     <Compile Include="SettingsManager.cs" />
     <Compile Include="TaskScheduler.cs" />
     <Compile Include="Views\WidgetUC.cs">

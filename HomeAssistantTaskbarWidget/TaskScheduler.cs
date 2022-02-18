@@ -7,6 +7,7 @@ namespace HomeAssistantTaskbarWidget
 {
     public class TaskScheduler : ITaskScheduler
     {
+        private int _startDelay = 1000;
         private int _interval  = 30000;
         private Func<Task> _task;
         private Timer _timer;
@@ -38,18 +39,18 @@ namespace HomeAssistantTaskbarWidget
         {
             _timer = new Timer();
             _timer.Interval = _interval;
-            _timer.Elapsed += Handler;
+            _timer.Elapsed += async (sender, e) => await Handler();
             _timer.Start();
 
-            Task.Run(() => {
-                Task.Delay(2000);
-                Handler(null, null);
-            });
-
+            new Task(async () => {
+                await Task.Delay(_startDelay);
+                await Handler();
+            }).Start();
+            
             return this;
         }
 
-        private async void Handler(object sender, ElapsedEventArgs e)
+        private async Task Handler()
         {
             try
             {

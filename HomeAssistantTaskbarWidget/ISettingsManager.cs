@@ -1,4 +1,4 @@
-﻿using HomeAssistantTaskbarWidget.Model;
+﻿using HomeAssistantTaskbarWidget.Model.Settings;
 
 namespace HomeAssistantTaskbarWidget
 {
