@@ -124,7 +124,7 @@ namespace HomeAssistantTaskbarWidget
 
             var result = await _homeAssistantClient.GetEntitiesStateAsync(entities);
 
-            if (result == null || result.Count == 0)
+            if (result == null || result.Count != entities.Count)
                 return;
 
             MergeStateMappings(settings, result);
